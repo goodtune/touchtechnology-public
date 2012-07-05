@@ -56,7 +56,6 @@ setup(
     description = 'Publicly released components used in all Touch Technology library code.',
     install_requires = [
         'Django',
-        'South',
         ],
     extras_require = {},
     packages = packages,
