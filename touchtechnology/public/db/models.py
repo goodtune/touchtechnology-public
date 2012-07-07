@@ -1,7 +1,12 @@
 from django.db import models
 
-from ..forms import BooleanChoiceField
-from ..mixins import SouthTripleMixin
+from ..forms.fields import (
+    BooleanChoiceField,
+    SelectDateField,
+    SelectDateTimeField,
+    SelectTimeField,
+    )
+from ..mixins.schema import SouthTripleMixin
 
 
 class BooleanField(SouthTripleMixin, models.BooleanField):
@@ -19,4 +24,22 @@ class BooleanField(SouthTripleMixin, models.BooleanField):
 
     def formfield(self, form_class=BooleanChoiceField, **kwargs):
         return super(BooleanField, self).formfield(
+            form_class=form_class, **kwargs)
+
+
+class DateField(SouthTripleMixin, models.DateField):
+    def formfield(self, form_class=SelectDateField, **kwargs):
+        return super(DateField, self).formfield(
+            form_class=form_class, **kwargs)
+
+
+class DateTimeField(SouthTripleMixin, models.DateTimeField):
+    def formfield(self, form_class=SelectDateTimeField, **kwargs):
+        return super(DateTimeField, self).formfield(
+            form_class=form_class, **kwargs)
+
+
+class TimeField(SouthTripleMixin, models.TimeField):
+    def formfield(self, form_class=SelectTimeField, **kwargs):
+        return super(TimeField, self).formfield(
             form_class=form_class, **kwargs)
