@@ -1,4 +1,8 @@
 from django import forms
+from django.forms.util import flatatt
+from django.forms.widgets import RadioFieldRenderer
+from django.utils.encoding import force_unicode
+from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 
 DAY_CHOICES = [('', '')] + zip(*[range(1, 32)] * 2)
@@ -25,10 +29,30 @@ MINUTES = range(0, 60)
 MINUTE_CHOICES = [('', '')] + zip(MINUTES, ['%02d' % m for m in MINUTES])
 
 
+class AttrRadioFieldRenderer(RadioFieldRenderer):
+    def render(self):
+        """Outputs a <ul> for this set of radio fields."""
+        attrs = flatatt(self.attrs)
+        li = u'\n'.join([u'<li>%s</li>' % force_unicode(w) for w in self])
+        return mark_safe(u'<ul%s>\n%s\n</ul>' % (attrs, li))
+
+
 class BooleanSelect(forms.RadioSelect):
+    renderer = AttrRadioFieldRenderer
+
     def render(self, name, value, attrs=None, choices=()):
+        if attrs is None:
+            attrs = {}
+        attrs.update({'class': 'boolean'})
         value = int(value or 0)
         return super(BooleanSelect, self).render(name, value, attrs, choices)
+
+    class Media:
+        css = {
+            'all': (
+                'touchtechnology/public/admin/css/boolean.css',
+                ),
+            }
 
 
 class SelectDateWidget(forms.MultiWidget):
