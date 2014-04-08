@@ -23,9 +23,6 @@ setup(
     install_requires=[
         'Django>=1.4.10,<1.7',
     ],
-    tests_require=[
-        'Django==1.4.10',
-    ],
     test_suite='test_app.runtests.runtests',
     include_package_data=True,
     namespace_packages=['touchtechnology'],
